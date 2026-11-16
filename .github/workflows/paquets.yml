@@ -1,0 +1,67 @@
+# Crée les paquets Firefox, Chrome et Edge.
+# - Push sur main : si l’étiquette « vX.Y.Z » de la version des manifestes n’existe pas,
+#   crée l’étiquette et une release GitHub avec les trois zips. Sinon, vérifie seulement.
+# - Lancement manuel (onglet Actions) : zips disponibles comme artefacts du workflow.
+name: Paquets
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  paquets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Vérifier les numéros de version
+        id: version
+        run: |
+          V=$(jq -r .version firefox/manifest.json)
+          for n in chrome edge; do
+            if [ "$(jq -r .version $n/manifest.json)" != "$V" ]; then
+              echo "::error file=$n/manifest.json::Version $(jq -r .version $n/manifest.json) au lieu de $V (firefox/manifest.json)."
+              exit 1
+            fi
+          done
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$V" > /dev/null; then
+            echo "nouvelle=false" >> "$GITHUB_OUTPUT"
+            echo "L’étiquette v$V existe déjà : pas de release."
+          else
+            echo "nouvelle=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Vérifier l’extension Firefox
+        run: npx --yes web-ext@10.8.0 lint --warnings-as-errors
+
+      - name: Créer les paquets
+        env:
+          V: ${{ steps.version.outputs.version }}
+        run: |
+          mkdir dist
+          npx --yes web-ext@10.8.0 build --artifacts-dir dist --filename "proxy-udem-firefox-$V.zip"
+          for n in chrome edge; do
+            (cd $n && zip -qrX "../dist/proxy-udem-$n-$V.zip" . -x '.DS_Store' '*/.DS_Store')
+          done
+          ls -l dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: paquets-${{ steps.version.outputs.version }}
+          path: dist/*.zip
+
+      - name: Publier la release
+        if: github.event_name == 'push' && steps.version.outputs.nouvelle == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.version.outputs.version }}
+        run: gh release create "v$V" dist/*.zip --target "$GITHUB_SHA" --title "Version $V" --generate-notes

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Proxy des bibliothèques UdeM",
+  "version": "1.2.4",
+  "description": "Active ou désactive en un clic le proxy des bibliothèques de l’Université de Montréal, dans Firefox seulement.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "studio@bib.umontreal.ca",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "permissions": ["proxy", "alarms"],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "action": {
+    "default_title": "Proxy des bibliothèques UdeM",
+    "default_icon": "icons/off.svg",
+    "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "48": "icons/on.svg",
+    "96": "icons/on.svg"
+  }
+}

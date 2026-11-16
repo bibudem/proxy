@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Proxy des bibliothèques UdeM",
+  "version": "1.2.4",
+  "description": "Active ou désactive en un clic le proxy des bibliothèques de l’Université de Montréal, dans Microsoft Edge seulement.",
+  "minimum_chrome_version": "116",
+  "permissions": ["proxy", "alarms"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Proxy des bibliothèques UdeM",
+    "default_icon": {
+      "16": "icons/off-16.png",
+      "32": "icons/off-32.png"
+    },
+    "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "icons/on-16.png",
+    "32": "icons/on-32.png",
+    "48": "icons/on-48.png",
+    "128": "icons/on-128.png"
+  }
+}

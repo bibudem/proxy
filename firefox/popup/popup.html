@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+  <meta charset="utf-8">
+  <title>Proxy des bibliothèques</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Icônes Phosphor (poids regular), comme sur bib.umontreal.ca -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="i-erreur" viewBox="0 0 256 256"><path d="M128,72a8,8,0,0,1,8,8v56a8,8,0,0,1-16,0V80A8,8,0,0,1,128,72ZM116,172a12,12,0,1,0,12-12A12,12,0,0,0,116,172Zm124-44a15.85,15.85,0,0,1-4.67,11.28l-96.05,96.06a16,16,0,0,1-22.56,0h0l-96-96.06a16,16,0,0,1,0-22.56l96.05-96.06a16,16,0,0,1,22.56,0l96.05,96.06A15.85,15.85,0,0,1,240,128Zm-16,0L128,32,32,128,128,224h0Z"/></symbol>
+    <symbol id="i-externe" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+  </svg>
+
+  <header class="entete">
+    <img class="logo logo-clair" src="logo-bib-horizontal.svg" alt="Les bibliothèques, Université de Montréal">
+    <img class="logo logo-fonce" src="logo-bib-horizontal-blanc.svg" alt="Les bibliothèques, Université de Montréal">
+  </header>
+
+  <main class="contenu">
+    <h1>Proxy des bibliothèques</h1>
+    <p class="chapeau">Consultez les ressources électroniques des bibliothèques à l’extérieur du campus.</p>
+
+    <div class="commande" id="commande">
+      <span class="commande-libelle" id="commande-libelle">Utiliser le proxy</span>
+      <button type="button" class="interrupteur" id="interrupteur" role="switch" aria-checked="false"
+              aria-labelledby="commande-libelle" aria-describedby="note-conflit note-erreur" aria-disabled="true">
+        <span class="interrupteur-piste"><span class="interrupteur-curseur"></span></span>
+      </button>
+    </div>
+    <div class="alerte" id="note-conflit" role="alert" hidden>
+      <div class="alerte-icone"><svg class="icone" aria-hidden="true"><use href="#i-erreur"/></svg></div>
+      <div class="alerte-message">
+        <p><strong>Une autre extension contrôle déjà le proxy</strong></p>
+        <p>Désactivez l’autre extension dans Firefox, puis rouvrez cette fenêtre.</p>
+      </div>
+    </div>
+    <div class="alerte" id="note-erreur" role="alert" hidden>
+      <div class="alerte-icone"><svg class="icone" aria-hidden="true"><use href="#i-erreur"/></svg></div>
+      <div class="alerte-message">
+        <p><strong>Impossible de modifier le proxy</strong></p>
+        <p>Réessayez. Si le problème persiste, redémarrez Firefox.</p>
+      </div>
+    </div>
+
+    <div class="alerte" id="etat" role="alert" hidden>
+      <div class="alerte-icone"><svg class="icone" aria-hidden="true"><use href="#i-erreur"/></svg></div>
+      <div class="alerte-message">
+        <p><strong>Autorisez l’extension en navigation privée</strong></p>
+        <p>Firefox l’exige pour qu’une extension puisse modifier le proxy.</p>
+
+        <ol class="etapes">
+          <li>Ouvrez le menu de Firefox, puis <strong>Extensions et thèmes</strong>.</li>
+          <li>Cliquez sur <strong>Proxy des bibliothèques UdeM</strong>.</li>
+          <li>À la ligne <strong>Exécution dans les fenêtres privées</strong>, choisissez <strong>Autoriser</strong>.</li>
+          <li>Rouvrez cette fenêtre.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="bouton bouton-contour" href="https://testproxy.umontreal.ca" target="_blank" rel="noopener">
+        Tester mon accès<span class="visuellement-masque"> (nouvel onglet)</span>
+        <svg class="icone icone-fin" aria-hidden="true"><use href="#i-externe"/></svg>
+      </a>
+    </div>
+  </main>
+
+  <nav class="liens" aria-label="Assistance">
+    <a href="https://studio.bib.umontreal.ca/informatique/proxy/" target="_blank" rel="noopener">
+      Aide sur le proxy<span class="visuellement-masque"> (nouvel onglet)</span>
+      <svg class="icone" aria-hidden="true"><use href="#i-externe"/></svg>
+    </a>
+    <a href="https://studio.bib.umontreal.ca/a-propos/soutien-informatique/" target="_blank" rel="noopener">
+      Nous joindre<span class="visuellement-masque"> (nouvel onglet)</span>
+      <svg class="icone" aria-hidden="true"><use href="#i-externe"/></svg>
+    </a>
+  </nav>
+
+  <script src="popup.js"></script>
+</body>
+</html>
